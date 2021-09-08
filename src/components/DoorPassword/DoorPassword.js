@@ -1,6 +1,7 @@
 import React from 'react';
 import {Button, Card, makeStyles, TextField} from "@material-ui/core";
-
+import NUMBERS from "../../constants";
+import {useDispatch} from "react-redux";
 const useStyles = makeStyles({
     root: {
         minWidth: 275,
@@ -10,19 +11,27 @@ const useStyles = makeStyles({
     button: {
         margin: '3px 2px',
         minWidth: '100px',
-        height: '50px'
-    },
-    title: {
-        fontSize: 14,
-    },
-    pos: {
-        marginBottom: 12,
+        height: '50px',
+        padding: '0px'
     },
 });
 
-const DoorPassword = () => {
+const DoorPassword = ({password}) => {
     const classes = useStyles();
 
+    const dispatch = useDispatch();
+
+    const getNumber = (e) => dispatch({
+        type: 'PASSWORD', payload: e.target.innerHTML
+    });
+
+    const deleteNumber = () => dispatch({
+        type: 'DELETE',
+    });
+
+    const checkNumber = () => dispatch({
+        type: 'CHECK',
+    });
     return (
         <Card className={classes.root}>
             <TextField
@@ -33,20 +42,15 @@ const DoorPassword = () => {
                 variant="filled"
                 fullWidth
                 minRows={3}
+                value={2}
             />
+            {NUMBERS.map(number => (
+                <Button className={classes.button} onClick={getNumber} key={number} variant="contained">{number}</Button>
+            ))}
 
-            <Button className={classes.button} variant="contained">1</Button>
-            <Button className={classes.button} variant="contained">2</Button>
-            <Button className={classes.button} variant="contained">3</Button>
-            <Button className={classes.button} variant="contained">4</Button>
-            <Button className={classes.button} variant="contained">5</Button>
-            <Button className={classes.button} variant="contained">6</Button>
-            <Button className={classes.button} variant="contained">7</Button>
-            <Button className={classes.button} variant="contained">8</Button>
-            <Button className={classes.button} variant="contained">9</Button>
-            <Button className={classes.button} variant="contained">X</Button>
-            <Button className={classes.button} variant="contained">0</Button>
-            <Button className={classes.button} variant="contained">E</Button>
+            <Button className={classes.button} onClick={deleteNumber} variant="contained">X</Button>
+            <Button className={classes.button} onClick={getNumber} variant="contained">0</Button>
+            <Button className={classes.button} onClick={checkNumber} variant="contained">E</Button>
         </Card>
     );
 };
