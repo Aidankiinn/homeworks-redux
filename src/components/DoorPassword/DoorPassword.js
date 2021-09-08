@@ -1,7 +1,8 @@
 import React from 'react';
 import {Button, Card, makeStyles, TextField} from "@material-ui/core";
 import NUMBERS from "../../constants";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
+import ModalMessage from "../ModalMessage/ModalMessage";
 const useStyles = makeStyles({
     root: {
         minWidth: 275,
@@ -16,10 +17,11 @@ const useStyles = makeStyles({
     },
 });
 
-const DoorPassword = ({password}) => {
+const DoorPassword = () => {
     const classes = useStyles();
 
     const dispatch = useDispatch();
+    const password = useSelector(state => state.password)
 
     const getNumber = (e) => dispatch({
         type: 'PASSWORD', payload: e.target.innerHTML
@@ -37,12 +39,11 @@ const DoorPassword = ({password}) => {
             <TextField
                 id="filled-textarea"
                 label="Password"
-                placeholder="Enter Password"
                 multiline
                 variant="filled"
                 fullWidth
                 minRows={3}
-                value={2}
+                value={password}
             />
             {NUMBERS.map(number => (
                 <Button className={classes.button} onClick={getNumber} key={number} variant="contained">{number}</Button>
@@ -51,6 +52,7 @@ const DoorPassword = ({password}) => {
             <Button className={classes.button} onClick={deleteNumber} variant="contained">X</Button>
             <Button className={classes.button} onClick={getNumber} variant="contained">0</Button>
             <Button className={classes.button} onClick={checkNumber} variant="contained">E</Button>
+            <ModalMessage title={'SUCCESS'}/>
         </Card>
     );
 };
