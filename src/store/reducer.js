@@ -1,35 +1,36 @@
 const initialState = {
     password: '',
-    open: false,
-    title: ''
+    title: '',
+    color: ''
 }
 
 const reducer = (state = initialState, action) => {
     if ((action.type === 'PASSWORD')) {
-        console.log(state.password)
-        return {...state, password: state.password + action.payload};
+        if (state.password.length === 4) {
+            return state;
+        }
+        if (isNaN(state.password)) {
+            return {...state, password: action.payload, color: '', title: ''};
+        }
+        return {...state, password: state.password + action.payload, title: '', color: ''};
     }
+
     if ((action.type === 'DELETE')) {
+        if (isNaN(state.password)) {
+            return {...state, password: '', color: '', title: ''}
+        }
         const password = state.password;
         const newPassword = password.slice(0, -1);
-        console.log(state.password)
         return {...state, password: newPassword};
     }
     if ((action.type === 'CHECK')) {
         if (state.password === '1234') {
-            console.log('Success');
-            // return <ModalMessage/>
-            return {...state, open: true, title: 'SUCCESS!'}
+            return {...state, password: 'Access Granted!', title: 'Access Granted!', color: 'green'}
         } else if (state.password === '') {
-            console.log('EMPTY');
-            return {...state, open: true, title: 'EMPTY!'}
+            return {...state, password: 'Enter PIN Code!', title: 'Enter PIN Code!', color: 'blue'}
         } else {
-            console.log('ERROR')
-            return {...state, open: true, title: 'ERROR!'}
+            return {...state, password: 'Access Denied!', title: "Access Denied!", color: 'red'}
         }
-    }
-    if ((action.type === 'CLOSE')) {
-        return {...state, open: false}
     }
     return state;
 };
