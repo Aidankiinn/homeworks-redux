@@ -1,8 +1,7 @@
 import React from 'react';
-import {Button, Card, makeStyles, TextField} from "@material-ui/core";
+import {Card, makeStyles, TextField, Typography} from "@material-ui/core";
 import NUMBERS from "../../constants";
 import {useDispatch, useSelector} from "react-redux";
-import ModalMessage from "../ModalMessage/ModalMessage";
 const useStyles = makeStyles({
     root: {
         minWidth: 275,
@@ -22,6 +21,7 @@ const DoorPassword = () => {
 
     const dispatch = useDispatch();
     const password = useSelector(state => state.password)
+    const color = useSelector(state => state.color)
 
     const getNumber = (e) => dispatch({
         type: 'PASSWORD', payload: e.target.innerHTML
@@ -34,8 +34,21 @@ const DoorPassword = () => {
     const checkNumber = () => dispatch({
         type: 'CHECK',
     });
+
+    const passwordStar = () => {
+        let stars = '';
+        for (let i = 0; i < password.length; i++) {
+            if (password !== isNaN && (password.length <= 4)) {
+                stars += '*';
+            } else {
+                stars = password;
+            }
+        }
+        return stars;
+    }
     return (
         <Card className={classes.root}>
+            <Typography variant='h6'>Enter PIN</Typography>
             <TextField
                 id="filled-textarea"
                 label="Password"
@@ -43,16 +56,16 @@ const DoorPassword = () => {
                 variant="filled"
                 fullWidth
                 minRows={3}
-                value={password}
+                value={passwordStar()}
+                style={{backgroundColor: color}}
             />
             {NUMBERS.map(number => (
-                <Button className={classes.button} onClick={getNumber} key={number} variant="contained">{number}</Button>
+                <button className={classes.button} onClick={getNumber} key={number}>{number}</button>
             ))}
 
-            <Button className={classes.button} onClick={deleteNumber} variant="contained">X</Button>
-            <Button className={classes.button} onClick={getNumber} variant="contained">0</Button>
-            <Button className={classes.button} onClick={checkNumber} variant="contained">E</Button>
-            <ModalMessage title={'SUCCESS'}/>
+            <button className={classes.button} onClick={deleteNumber}>X</button>
+            <button className={classes.button} onClick={getNumber}>0</button>
+            <button className={classes.button} onClick={checkNumber}>E</button>
         </Card>
     );
 };
